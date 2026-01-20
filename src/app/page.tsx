@@ -1,5 +1,3 @@
-"use client"; // ヘッダーやFAQでuseStateなどを使う場合はこれが必要
-
 import Header from "@/app/_components/Header";
 import Hero from "@/app/_components/Hero";
 import Problems from "@/app/_components/Problems";
