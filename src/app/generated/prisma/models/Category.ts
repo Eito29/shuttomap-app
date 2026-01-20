@@ -456,6 +456,7 @@ export type CategoryCreateOrConnectWithoutUserInput = {
 
 export type CategoryCreateManyUserInputEnvelope = {
   data: Prisma.CategoryCreateManyUserInput | Prisma.CategoryCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type CategoryUpsertWithWhereUniqueWithoutUserInput = {
@@ -1312,6 +1313,7 @@ export type CategoryCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * The data used to create many Categories.
    */
   data: Prisma.CategoryCreateManyInput | Prisma.CategoryCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1330,6 +1332,7 @@ export type CategoryCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many Categories.
    */
   data: Prisma.CategoryCreateManyInput | Prisma.CategoryCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

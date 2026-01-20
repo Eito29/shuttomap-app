@@ -19,8 +19,8 @@ const config: runtime.GetPrismaClientConfig = {
   "previewFeatures": [],
   "clientVersion": "7.2.0",
   "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
-  "activeProvider": "sqlite",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n}\n\nmodel User {\n  id        Int      @id @default(autoincrement())\n  name      String\n  // NextAuthとの互換性を考えて 'image' と命名\n  // DB上では分かりやすく 'image_url' にマッピング\n  // 必須ではない場合は ? をつける\n  image     String?  @map(\"image_url\")\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @updatedAt @map(\"updated_at\")\n\n  // 【1対多】1人のユーザーは複数のカテゴリーを持つ（[ {id: 1, name: \"カテゴリー名１\"}, {id: 2, name: \"カテゴリー名２\"} ]）\n  categories Category[]\n  // 【1対多】1人のユーザーは複数のスポットを持つ\n  spots      Spot[]\n}\n\nmodel Spot {\n  id        Int      @id @default(autoincrement())\n  name      String\n  address   String\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @updatedAt @map(\"updated_at\")\n\n  // 【1対多】スポットは1人のユーザーに属する\n  userId Int  @map(\"user_id\")\n  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  // 【1対多】スポットは1つのカテゴリーに属する\n  // カテゴリーが消えてもスポットは残したいので ? (任意) にする\n  categoryId Int?      @map(\"category_id\")\n  // onDelete: SetNull を指定して、カテゴリー削除時にここを null にすることでスポットを残す\n  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)\n}\n\nmodel Category {\n  id        Int      @id @default(autoincrement())\n  name      String\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @updatedAt @map(\"updated_at\")\n\n  // 【1対多】カテゴリーは1人のユーザーに属する\n  userId Int  @map(\"user_id\")\n  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  // 【1対多】1つのカテゴリーは複数のスポットを持つ\n  spots Spot[]\n}\n",
+  "activeProvider": "postgresql",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id        Int      @id @default(autoincrement())\n  name      String\n  // NextAuthとの互換性を考えて 'image' と命名\n  // DB上では分かりやすく 'image_url' にマッピング\n  // 必須ではない場合は ? をつける\n  image     String?  @map(\"image_url\")\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @updatedAt @map(\"updated_at\")\n\n  // 【1対多】1人のユーザーは複数のカテゴリーを持つ（[ {id: 1, name: \"カテゴリー名１\"}, {id: 2, name: \"カテゴリー名２\"} ]）\n  categories Category[]\n  // 【1対多】1人のユーザーは複数のスポットを持つ\n  spots      Spot[]\n}\n\nmodel Spot {\n  id        Int      @id @default(autoincrement())\n  name      String\n  address   String\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @updatedAt @map(\"updated_at\")\n\n  // 【1対多】スポットは1人のユーザーに属する\n  userId Int  @map(\"user_id\")\n  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  // 【1対多】スポットは1つのカテゴリーに属する\n  // カテゴリーが消えてもスポットは残したいので ? (任意) にする\n  categoryId Int?      @map(\"category_id\")\n  // onDelete: SetNull を指定して、カテゴリー削除時にここを null にすることでスポットを残す\n  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)\n}\n\nmodel Category {\n  id        Int      @id @default(autoincrement())\n  name      String\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @updatedAt @map(\"updated_at\")\n\n  // 【1対多】カテゴリーは1人のユーザーに属する\n  userId Int  @map(\"user_id\")\n  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  // 【1対多】1つのカテゴリーは複数のスポットを持つ\n  spots Spot[]\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -37,10 +37,10 @@ async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Modul
 }
 
 config.compilerWasm = {
-  getRuntime: async () => await import("@prisma/client/runtime/query_compiler_bg.sqlite.mjs"),
+  getRuntime: async () => await import("@prisma/client/runtime/query_compiler_bg.postgresql.mjs"),
 
   getQueryCompilerWasmModule: async () => {
-    const { wasm } = await import("@prisma/client/runtime/query_compiler_bg.sqlite.wasm-base64.mjs")
+    const { wasm } = await import("@prisma/client/runtime/query_compiler_bg.postgresql.wasm-base64.mjs")
     return await decodeBase64AsWasm(wasm)
   }
 }

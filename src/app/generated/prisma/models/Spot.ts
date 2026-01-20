@@ -532,6 +532,7 @@ export type SpotCreateOrConnectWithoutUserInput = {
 
 export type SpotCreateManyUserInputEnvelope = {
   data: Prisma.SpotCreateManyUserInput | Prisma.SpotCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type SpotUpsertWithWhereUniqueWithoutUserInput = {
@@ -587,6 +588,7 @@ export type SpotCreateOrConnectWithoutCategoryInput = {
 
 export type SpotCreateManyCategoryInputEnvelope = {
   data: Prisma.SpotCreateManyCategoryInput | Prisma.SpotCreateManyCategoryInput[]
+  skipDuplicates?: boolean
 }
 
 export type SpotUpsertWithWhereUniqueWithoutCategoryInput = {
@@ -1412,6 +1414,7 @@ export type SpotCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * The data used to create many Spots.
    */
   data: Prisma.SpotCreateManyInput | Prisma.SpotCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1430,6 +1433,7 @@ export type SpotCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * The data used to create many Spots.
    */
   data: Prisma.SpotCreateManyInput | Prisma.SpotCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */
